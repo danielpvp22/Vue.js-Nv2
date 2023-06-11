@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="ordenando.js"></script>
+  </head>
+  <body>
+    <input type="number" id="valor" />
+    <select id="algoritmo">
+      <option value="bubble">Blubble Sort</option>
+      <option value="selection">Selection Sort</option>
+      <option value="quick">Quick Sort</option>
+    </select>
+    <button onclick="add()">adicionar</button>
+    <button onclick="ordenar()">Ordenar</button>
+    <button onclick="misturar()">Misturar</button>
+
+    <ul id="valores"></ul>
+
+    <script>
+      function add() {
+        const input = document.getElementById("valor");
+        const lista = document.getElementById("valores");
+        const node = document.createElement("li");
+        const textNode = document.createTextNode(input.value);
+        node.appendChild(textNode);
+        lista.appendChild(node);
+        input.value = "";
+      }
+
+      function ordenar() {
+        const lista = document.getElementById("valores");
+        const algoritmo = document.getElementById("algoritmo").value;
+
+        const valores = Array.from(lista.children).map((item) =>
+          parseInt(item.innerHTML)
+        );
+
+        switch (algoritmo) {
+          case "bubble":
+            bubbleSort(valores);
+            break;
+          case "selection":
+            selectionSort(valores);
+            break;
+          case "quick":
+            quickSort(valores, 0, valores.length - 1);
+            break;
+          default:
+            break;
+        }
+
+        lista.innerHTML = valores
+          .map((valor) => `<li>${valor}</li>`)
+          .reduce((acc, valor) => acc + valor, "");
+      }
+
+      function shuffle(array) {
+        if (!Array.isArray(array)) {
+          throw new Error("O parâmetro fornecido não é um vetor.");
+        }
+
+        const arrayMisturado = array.slice();
+
+        const length = arrayMisturado.length;
+
+        for (let i = 0; i < length; i++) {
+          const index1 = Math.floor(Math.random() * length);
+          const index2 = Math.floor(Math.random() * length);
+
+          const temp = arrayMisturado[index1];
+          arrayMisturado[index1] = arrayMisturado[index2];
+          arrayMisturado[index2] = temp;
+        }
+
+        return arrayMisturado;
+      }
+
+      function misturar() {
+        const listaValores = document.getElementById("valores");
+        const valores = Array.from(listaValores.children).map((item) =>
+          parseInt(item.innerHTML)
+        );
+        const teste = shuffle(valores);
+
+        const novoConteudo = teste
+          .map((valor) => `<li>${valor}</li>`)
+          .reduce((anterior, atual) => anterior + atual, "");
+        listaValores.innerHTML = novoConteudo;
+      }
+    </script>
+  </body>
+</html>
